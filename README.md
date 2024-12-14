@@ -28,6 +28,7 @@ A web application that allows users to dynamically edit YAML files, render their
    Place a valid `config.yaml` file on the server under the `YML/` directory.
 
 ---
+Here’s the markdown version for the provided content:
 
 ### **Installation**
 1. Clone the repository:
@@ -112,19 +113,23 @@ Technologies Used
 	•	Build Tool: Vite
 	•	Deployment: YAML file deployment via HTTP POST requests
 
-License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
 Contributing
 	1.	Fork the repository.
-	2.	Create a new branch: git checkout -b feature-name.
-	3.	Commit your changes: git commit -m 'Add some feature'.
-	4.	Push to the branch: git push origin feature-name.
+	2.	Create a new branch:
+
+git checkout -b feature-name
+
+
+	3.	Commit your changes:
+
+git commit -m 'Add some feature'
+
+
+	4.	Push to the branch:
+
+git push origin feature-name
+
+
 	5.	Open a pull request.
 
-Contact
-	•	Author: Suchita Dabir
-	•	Email: suchita.dabir@example.com
-
-Replace placeholders like `<Your-Server-IP>` and `yourusername` with the actual values specific to your setup.
+Replace placeholders like <Your-Server-IP> and yourusername with the actual values specific to your setup.
