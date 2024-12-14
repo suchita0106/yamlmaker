@@ -1,0 +1,101 @@
+/* App Styles */
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+/* .app {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+} */
+
+.app-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section {
+  border-left: 4px solid #28a745;
+  padding-left: 15px;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.section-contents {
+  padding-left: 20px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.field-label {
+  flex: 0 0 150px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #444;
+}
+
+.field-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.field-input:focus {
+  border-color: #28a745;
+  outline: none;
+}
+
+.download-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.download-button:hover {
+  background-color: #218838;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+}
+
+.error {
+  text-align: center;
+  font-size: 18px;
+  color: red;
+}

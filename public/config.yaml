@@ -1,0 +1,20 @@
+# Default values for open5gs-epc-helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+modifiedYml:
+  container:
+    repo: newrepo/modified-app
+    pullPolicy: IfNotPresent
+    tag: "stable-release"
+  network:
+    enableHost: true
+    interfaceName: "net-intf0"
+  protocols:
+    pfcp:
+      port: 9000
+    gtpv1:
+      port: 3000
+    gtpv2:
+      port: 4000
+  radio:
+    frequencyPort: 5000
