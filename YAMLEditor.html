@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic YAML Editor</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .key {
+      font-weight: bold;
+      color: #4caf50;
+    }
+    .section {
+      margin-bottom: 20px;
+      padding-left: 20px;
+      border-left: 4px solid #4caf50;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .label {
+      flex: 1;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    .input, select {
+      flex: 3;
+      width: 100%;
+    }
+    .buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      margin: 5px;
+    }
+    button.primary {
+      background-color: #4caf50;
+      color: white;
+    }
+    button.secondary {
+      background-color: #2196f3;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 style="text-align: center; color: #4caf50;">Dynamic YAML Editor</h2>
+    <div id="editor"></div>
+    <div class="buttons">
+      <button class="primary" id="download">Download YAML</button>
+      <button class="secondary" id="deploy">Deploy YAML</button>
+    </div>
+  </div>
+
+  <script>
+    const serverIp = '10.0.0.48'; // Replace with your server IP
+    let yamlContent = null;
+
+    async function fetchYaml() {
+      try {
+        const response = await fetch(`http://${serverIp}:5001/get-config`);
+        if (response.ok) {
+          const yamlText = await response.text();
+          yamlContent = jsyaml.load(yamlText);
+          console.log("YAML Content Fetched:", yamlContent);
+          renderEditor(yamlContent);
+        } else {
+          console.error("Failed to fetch YAML file from server.");
+        }
+      } catch (error) {
+        console.error("Error fetching YAML file:", error);
+      }
+    }
+
+    function renderEditor(obj, path = []) {
+      const editor = document.getElementById("editor");
+      editor.innerHTML = ""; 
+      editor.appendChild(renderInputs(obj, path));
+    }
+
+function renderInputs(obj, path) {
+  const fragment = document.createDocumentFragment();
+
+  Object.entries(obj).forEach(([key, value]) => {
+    const currentPath = [...path, key];
+
+    if (Array.isArray(value)) {
+      // Handle arrays
+      const section = document.createElement("div");
+      section.className = "section";
+      section.innerHTML = `<div class="key">${key}:</div>`;
+      
+      value.forEach((item, index) => {
+        if (typeof item === "object" && item !== null) {
+          const subSection = document.createElement("div");
+          subSection.className = "section";
+          subSection.innerHTML = `<div class="key">${key}[${index}]</div>`;
+          subSection.appendChild(renderInputs(item, [...currentPath, index]));
+          section.appendChild(subSection);
+        } else {
+          const row = document.createElement("div");
+          row.className = "row";
+
+          const label = document.createElement("div");
+          label.className = "label";
+          label.innerText = `${key}[${index}]:`;
+
+          const input = document.createElement("input");
+          input.className = "input";
+          input.value = item;
+          input.oninput = (e) => handleChange([...currentPath, index], e.target.value);
+
+          row.appendChild(label);
+          row.appendChild(input);
+          section.appendChild(row);
+        }
+      });
+
+      fragment.appendChild(section);
+    } else if (typeof value === "object" && value !== null) {
+      // Handle objects
+      const section = document.createElement("div");
+      section.className = "section";
+      section.innerHTML = `<div class="key">${key}</div>`;
+      section.appendChild(renderInputs(value, currentPath));
+      fragment.appendChild(section);
+    } else {
+      // Handle primitive values
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const label = document.createElement("div");
+      label.className = "label";
+      label.innerText = `${key}:`;
+
+      let input;
+      if (typeof value === "boolean") {
+        input = document.createElement("select");
+        input.className = "input";
+        input.innerHTML = `
+          <option value="true" ${value ? "selected" : ""}>True</option>
+          <option value="false" ${!value ? "selected" : ""}>False</option>
+        `;
+        input.onchange = (e) => handleChange(currentPath, e.target.value === "true");
+      } else {
+        input = document.createElement("input");
+        input.className = "input";
+        input.value = value;
+        input.oninput = (e) => handleChange(currentPath, e.target.value);
+      }
+
+      row.appendChild(label);
+      row.appendChild(input);
+      fragment.appendChild(row);
+    }
+  });
+
+  return fragment;
+}
+
+    function handleChange(path, value) {
+      console.log(`Updating path ${path.join(".")} with value: ${value}`);
+      let current = yamlContent;
+      for (let i = 0; i < path.length - 1; i++) {
+        current = current[path[i]];
+      }
+      current[path[path.length - 1]] = value;
+    }
+
+    document.getElementById("download").onclick = () => {
+      const yamlStr = jsyaml.dump(yamlContent);
+      const blob = new Blob([yamlStr], { type: "text/yaml;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "updated-config.yaml";
+      link.click();
+    };
+
+    document.getElementById("deploy").onclick = async () => {
+      try {
+        const yamlStr = jsyaml.dump(yamlContent);
+        const response = await fetch(`http://${serverIp}:5001/deploy`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ yamlContent: yamlStr }),
+        });
+        if (response.ok) {
+          alert("YAML deployed successfully!");
+        } else {
+          alert("Failed to deploy YAML.");
+        }
+      } catch (error) {
+        console.error("Error deploying YAML:", error);
+      }
+    };
+
+    fetchYaml();
+  </script>
+</body>
+</html>
