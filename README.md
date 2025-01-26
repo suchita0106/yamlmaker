@@ -68,22 +68,9 @@ npm run dev
 
 http://<Your-IP>:5173
 
-File Structure
 `
-├── README.md               # Project documentation
-├── YML/                    # YAML files directory
-│   └── config.yaml         # Initial YAML configuration
-├── dist/                   # Build output folder 
-├── public/                 # Static assets
-├── src/                    # Source code for the frontend
-│   └── App.tsx             # Main React application component
-├── server.js               # Backend server
-├── tsconfig.json           # TypeScript configuration
-├── package.json            # Project dependencies
-└── vite.config.ts          # Vite configuration
-`
-
 Endpoints
+`
 
 GET /get-config
 
