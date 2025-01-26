@@ -69,7 +69,7 @@ npm run dev
 http://<Your-IP>:5173
 
 File Structure
-
+`
 ├── README.md               # Project documentation
 ├── YML/                    # YAML files directory
 │   └── config.yaml         # Initial YAML configuration
@@ -81,40 +81,48 @@ File Structure
 ├── tsconfig.json           # TypeScript configuration
 ├── package.json            # Project dependencies
 └── vite.config.ts          # Vite configuration
+`
 
 Endpoints
 
 GET /get-config
 
 Fetches the YAML file from the server.
-	•	Response:
+
+•	Response:
+
 YAML content as plain text.
+
 
 POST /deploy
 
 Deploys the updated YAML content to the server.
-	•	Request Body:
-
+•	Request Body:
+`
 {
   "yamlContent": "<Updated YAML content as a string>"
 }
+`
 
-
-	•	Response:
+•	Response:
 JSON with deployment status:
 
+`
 {
   "message": "YAML file deployed successfully!"
 }
-
+`
 Technologies Used
+
 	•	Frontend: React, Ant Design, js-yaml
 	•	Backend: Node.js, Express
 	•	Build Tool: Vite
 	•	Deployment: YAML file deployment via HTTP POST requests
 
 Contributing
+
 	1.	Fork the repository.
+ 
 	2.	Create a new branch:
 
 git checkout -b feature-name
