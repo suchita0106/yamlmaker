@@ -73,7 +73,7 @@ File Structure
 ├── README.md               # Project documentation
 ├── YML/                    # YAML files directory
 │   └── config.yaml         # Initial YAML configuration
-├── dist/                   # Build output folder (ignored in `.gitignore`)
+├── dist/                   # Build output folder 
 ├── public/                 # Static assets
 ├── src/                    # Source code for the frontend
 │   └── App.tsx             # Main React application component
